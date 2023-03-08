@@ -44,11 +44,6 @@ if ! check_cmd go; then
     fi
 fi
 
-if check_cmd apt-get; then
-    sudo ufw allow proto tcp from any to any port 80,443 && sudo iptables -F
-else
-    firewall-cmd --permanent --add-port=80/tcp --add-port=443/tcp && firewall-cmd --reload && iptables -F
-
 cd /root
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 /root/go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive --with github.com/imgk/caddy-trojan
