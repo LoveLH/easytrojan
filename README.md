@@ -17,7 +17,7 @@
 #### 首次安装 ####
 请将结尾的password更换为自己的密码，例如 bash easytrojan.sh 123456，安装成功后会返回trojan的连接参数
 ```
-curl https://raw.githubusercontent.com/maplecool/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password
+curl https://raw.githubusercontent.com/LoveLH/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password
 ```
 
 #### 放行端口 ####
@@ -38,7 +38,7 @@ sudo ufw allow proto tcp from any to any port 80,443 && sudo iptables -F
 请将结尾的password更换为自己的密码，仅限字母、数字、下划线，非多密码管理用途无需使用
 ```
 # 下载trojan密码管理脚本
-curl https://raw.githubusercontent.com/maplecool/easytrojan/main/mytrojan.sh -o mytrojan.sh && chmod +x mytrojan.sh
+curl https://raw.githubusercontent.com/LoveLH/easytrojan/main/mytrojan.sh -o mytrojan.sh && chmod +x mytrojan.sh
 
 # 创建密码
 bash mytrojan.sh add password
@@ -65,7 +65,7 @@ bash mytrojan.sh list
 
 #### 重新安装 ####
 ```
-systemctl stop caddy.service && curl https://raw.githubusercontent.com/maplecool/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password
+systemctl stop caddy.service && curl https://raw.githubusercontent.com/LoveLH/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password
 ```
 
 #### 完全卸载 ####
@@ -96,7 +96,7 @@ systemctl stop caddy.service && systemctl disable caddy.service && rm -rf /etc/c
 仅建议在免费域名被阻断时使用
 ```
 在密码后加入域名即可指定域名重新安装，密码与域名之间应使用空格分隔，执行命令如下：
-systemctl stop caddy.service && curl https://raw.githubusercontent.com/maplecool/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password yourdomain
+systemctl stop caddy.service && curl https://raw.githubusercontent.com/LoveLH/easytrojan/main/easytrojan.sh -o easytrojan.sh && chmod +x easytrojan.sh && bash easytrojan.sh password yourdomain
 
 *当指定域名后，如需切换回免费域名，必须完全卸载脚本，重新执行首次安装命令
 ```
