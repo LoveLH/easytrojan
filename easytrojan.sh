@@ -31,23 +31,42 @@ if ! check_cmd tar; then
     fi
 fi
 
-case $(uname -m) in
-    x86_64)
-        caddy_url=https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_amd64.tar.gz
-        ;;
-    aarch64)
-        caddy_url=https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_arm64.tar.gz
-        ;;
-    *) 
-        echo "Error: Your system version does not support"
-        exit 1
-        ;;
-esac
+if ! check_cmd go; then
+    echo "go: command not found, installing..."
+    if check_cmd yum; then
+        yum install -y go
+    elif check_cmd apt-get; then
+        apt install golang-go
+    elif check_cmd dnf; then
+        dnf install -y go
+    else
+        echo "Error: Unable to install go"; exit 1
+    fi
+fi
 
-curl -L $caddy_url | tar -zx -C /usr/local/bin caddy
+cd /root
+go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+/root/go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive --with github.com/imgk/caddy-trojan
 
-/usr/local/bin/caddy add-package github.com/imgk/caddy-trojan@8d46fda7c33580ed047d557fc97b512a42ec398b
-if ! /usr/local/bin/caddy build-info 2>&1 | grep caddy-trojan; then echo "Error: Failed to add-package caddy-trojan"; exit 1; fi
+cp /root/caddy /usr/local/bin/caddy
+
+# case $(uname -m) in
+#     x86_64)
+#         caddy_url=https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_amd64.tar.gz
+#         ;;
+#     aarch64)
+#         caddy_url=https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_arm64.tar.gz
+#         ;;
+#     *) 
+#         echo "Error: Your system version does not support"
+#         exit 1
+#         ;;
+# esac
+
+# curl -L $caddy_url | tar -zx -C /usr/local/bin caddy
+
+# /usr/local/bin/caddy add-package github.com/imgk/caddy-trojan@8d46fda7c33580ed047d557fc97b512a42ec398b
+# if ! /usr/local/bin/caddy build-info 2>&1 | grep caddy-trojan; then echo "Error: Failed to add-package caddy-trojan"; exit 1; fi
 
 if ! id caddy &>/dev/null; then groupadd --system caddy; useradd --system -g caddy -s "$(command -v nologin)" caddy; fi
 
