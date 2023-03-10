@@ -44,11 +44,10 @@ if ! check_cmd go; then
     fi
 fi
 
-cd /root
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
-/root/go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive --with github.com/imgk/caddy-trojan
+./go/bin/xcaddy build --with github.com/imgk/caddy-trojan
 
-cp /root/caddy /usr/local/bin/caddy
+cp caddy /usr/local/bin/caddy
 
 # case $(uname -m) in
 #     x86_64)
