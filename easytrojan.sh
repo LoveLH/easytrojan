@@ -34,23 +34,17 @@ fi
 if ! check_cmd go; then
     echo "go: command not found, installing..."
     if check_cmd yum; then
-        yum install -y go
+        yum install -y golang
     elif check_cmd apt-get; then
-        apt install golang-go
+        apt-get install -y golang-go
     elif check_cmd dnf; then
-        dnf install -y go
+        dnf install go -y
     else
         echo "Error: Unable to install go"; exit 1
     fi
 fi
 
-git clone https://go.googlesource.com/go goroot
-cd goroot
-git checkout master
-cd src
-./all.bash
-
-./go/bin/go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 ./go/bin/xcaddy build --with github.com/imgk/caddy-trojan
 
 cp caddy /usr/local/bin/caddy
