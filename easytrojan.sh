@@ -44,8 +44,28 @@ if ! check_cmd go; then
     fi
 fi
 
-go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
-./go/bin/xcaddy build --with github.com/imgk/caddy-trojan
+case $(uname -m) in
+    x86_64)
+        curl -L https://go.dev/dl/go1.19.7.linux-amd64.tar.gz | tar -zx -C /usr/local
+        echo 'export PATH=$PATH:/usr/local/go/bin' > /etc/profile.d/golang.sh
+        source /etc/profile.d/golang.sh
+        curl -L https://github.com/caddyserver/xcaddy/releases/download/v0.3.2/xcaddy_0.3.2_linux_amd64.tar.gz | tar -zx -C /usr/local/bin xcaddy
+        cd /usr/local/bin
+        GOOS=linux GOARCH=amd64 xcaddy build --with github.com/imgk/caddy-trojan
+        ;;
+    aarch64)
+        curl -L https://go.dev/dl/go1.19.7.linux-arm64.tar.gz | tar -zx -C /usr/local
+        echo 'export PATH=$PATH:/usr/local/go/bin' > /etc/profile.d/golang.sh
+        source /etc/profile.d/golang.sh
+        curl -L https://github.com/caddyserver/xcaddy/releases/download/v0.3.2/xcaddy_0.3.2_linux_arm64.tar.gz | tar -zx -C /usr/local/bin xcaddy
+        cd /usr/local/bin
+        GOOS=linux GOARCH=arm64 xcaddy build --with github.com/imgk/caddy-trojan
+        ;;
+    *)
+        echo "Error: Your system version does not support"
+        exit 1
+        ;;
+esac
 
 cp caddy /usr/local/bin/caddy
 
